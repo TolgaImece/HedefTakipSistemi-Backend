@@ -58,7 +58,7 @@ public class UsersController : ControllerBase
         try
         {
             var user = await _userService.CreateAsync(request);
-            _audit.Send("IdentityService", "CreateUser", "User", user.Id.ToString(),
+            _audit.Send("IdentityService", "Create", "User", user.Id.ToString(),
                 CurrentUserId, $"Email: {user.Email}, Rol: {user.Role}");
             return CreatedAtAction(nameof(GetById), new { id = user.Id },
                 ApiResponse<UserDto>.Ok(user, Messages.User.Created));
@@ -79,7 +79,7 @@ public class UsersController : ControllerBase
             if (user is null)
                 return NotFound(ApiResponse.Fail(Messages.User.NotFound, Messages.User.NotFoundUser, Messages.User.NotFoundUser));
 
-            _audit.Send("IdentityService", "UpdateUser", "User", id.ToString(),
+            _audit.Send("IdentityService", "Update", "User", id.ToString(),
                 CurrentUserId, $"Email: {user.Email}, Rol: {user.Role}");
             return Ok(ApiResponse<UserDto>.Ok(user, Messages.User.Updated));
         }
@@ -97,7 +97,7 @@ public class UsersController : ControllerBase
         if (!result)
             return NotFound(ApiResponse.Fail(Messages.User.NotFound, Messages.User.NotFoundUser, Messages.User.NotFoundUser));
 
-        _audit.Send("IdentityService", "DeleteUser", "User", id.ToString(), CurrentUserId);
+        _audit.Send("IdentityService", "Delete", "User", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData(Messages.User.Deleted));
     }
 
@@ -116,9 +116,10 @@ public class UsersController : ControllerBase
         if (result is null)
             return NotFound(ApiResponse.Fail(Messages.User.NotFound, Messages.User.NotFoundUser, Messages.User.NotFoundUser));
 
-        var action = request.DepartmentId.HasValue ? "AddUserToDepartment" : "RemoveUserFromDepartment";
-        _audit.Send("IdentityService", action, "User", id.ToString(), CurrentUserId,
-            $"DepartmentId: {managerDeptId}");
+        var auditDetails = request.DepartmentId.HasValue
+            ? $"Departmana eklendi. DepartmentId: {managerDeptId}"
+            : $"Departmandan çıkarıldı. DepartmentId: {managerDeptId}";
+        _audit.Send("IdentityService", "Update", "User", id.ToString(), CurrentUserId, auditDetails);
 
         var msg = request.DepartmentId.HasValue ? "Kullanıcı departmana eklendi." : "Kullanıcı departmandan çıkarıldı.";
         return Ok(ApiResponse<UserDto>.Ok(result, msg));

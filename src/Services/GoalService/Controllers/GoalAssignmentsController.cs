@@ -66,7 +66,7 @@ public class GoalAssignmentsController : ControllerBase
         try
         {
             var assignment = await _assignmentService.CreateAsync(request);
-            _audit.Send("GoalService", "CreateGoalAssignment", "GoalAssignment", assignment.Id.ToString(),
+            _audit.Send("GoalService", "Create", "GoalAssignment", assignment.Id.ToString(),
                 CurrentUserId, $"Şablon: {assignment.TemplateTitle}, Kullanıcı: {assignment.UserId}, Dönem: {assignment.PeriodId}");
             return CreatedAtAction(nameof(GetById), new { id = assignment.Id },
                 ApiResponse<GoalAssignmentDto>.Ok(assignment, Messages.GoalAssignment.Created));
@@ -86,7 +86,7 @@ public class GoalAssignmentsController : ControllerBase
             if (assignment is null)
                 return NotFound(ApiResponse.Fail(Messages.GoalAssignment.NotFound, Messages.GoalAssignment.NotFoundUser, Messages.GoalAssignment.NotFoundUser));
 
-            _audit.Send("GoalService", "UpdateGoalAssignmentStatus", "GoalAssignment", id.ToString(),
+            _audit.Send("GoalService", "StatusChange", "GoalAssignment", id.ToString(),
                 CurrentUserId, $"Yeni durum: {request.Status}");
             return Ok(ApiResponse<GoalAssignmentDto>.Ok(assignment, Messages.GoalAssignment.StatusUpdated));
         }
@@ -104,7 +104,7 @@ public class GoalAssignmentsController : ControllerBase
         if (!result)
             return NotFound(ApiResponse.Fail(Messages.GoalAssignment.NotFound, Messages.GoalAssignment.NotFoundUser, Messages.GoalAssignment.NotFoundUser));
 
-        _audit.Send("GoalService", "DeleteGoalAssignment", "GoalAssignment", id.ToString(), CurrentUserId);
+        _audit.Send("GoalService", "Delete", "GoalAssignment", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData(Messages.GoalAssignment.Deleted));
     }
 }

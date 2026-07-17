@@ -70,7 +70,7 @@ public class DepartmentsController : ControllerBase
         _db.Departments.Add(dept);
         await _db.SaveChangesAsync();
 
-        _audit.Send("IdentityService", "CreateDepartment", "Department", dept.Id.ToString(), CurrentUserId, dept.Name);
+        _audit.Send("IdentityService", "Create", "Department", dept.Id.ToString(), CurrentUserId, dept.Name);
         return CreatedAtAction(nameof(GetById), new { id = dept.Id },
             ApiResponse<DepartmentDto>.Ok(new(dept.Id, dept.Name, dept.IsActive, []), Messages.Department.Created));
     }
@@ -88,7 +88,7 @@ public class DepartmentsController : ControllerBase
         dept.UpdatedTime = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
-        _audit.Send("IdentityService", "UpdateDepartment", "Department", id.ToString(), CurrentUserId, dept.Name);
+        _audit.Send("IdentityService", "Update", "Department", id.ToString(), CurrentUserId, dept.Name);
         return Ok(ApiResponse<DepartmentDto>.Ok(new(dept.Id, dept.Name, dept.IsActive, []), Messages.Department.Updated));
     }
 
@@ -104,7 +104,7 @@ public class DepartmentsController : ControllerBase
         dept.UpdatedTime = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
-        _audit.Send("IdentityService", "DeleteDepartment", "Department", id.ToString(), CurrentUserId);
+        _audit.Send("IdentityService", "Delete", "Department", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData(Messages.Department.Deleted));
     }
 
@@ -130,7 +130,7 @@ public class DepartmentsController : ControllerBase
         _db.Positions.Add(position);
         await _db.SaveChangesAsync();
 
-        _audit.Send("IdentityService", "CreatePosition", "Position", position.Id.ToString(), CurrentUserId, position.Name);
+        _audit.Send("IdentityService", "Create", "Position", position.Id.ToString(), CurrentUserId, position.Name);
         return CreatedAtAction(nameof(GetPositions), new { departmentId },
             ApiResponse<PositionDto>.Ok(new(position.Id, position.DepartmentId, position.Name, position.IsActive), Messages.Position.Created));
     }
@@ -148,7 +148,7 @@ public class DepartmentsController : ControllerBase
         position.UpdatedTime = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
-        _audit.Send("IdentityService", "UpdatePosition", "Position", id.ToString(), CurrentUserId, position.Name);
+        _audit.Send("IdentityService", "Update", "Position", id.ToString(), CurrentUserId, position.Name);
         return Ok(ApiResponse<PositionDto>.Ok(new(position.Id, position.DepartmentId, position.Name, position.IsActive), Messages.Position.Updated));
     }
 
@@ -164,7 +164,7 @@ public class DepartmentsController : ControllerBase
         position.UpdatedTime = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
-        _audit.Send("IdentityService", "DeletePosition", "Position", id.ToString(), CurrentUserId);
+        _audit.Send("IdentityService", "Delete", "Position", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData(Messages.Position.Deleted));
     }
 }

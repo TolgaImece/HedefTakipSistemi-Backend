@@ -50,7 +50,7 @@ public class PeriodsController : ControllerBase
         try
         {
             var period = await _periodService.CreateAsync(request);
-            _audit.Send("ParameterService", "CreatePeriod", "Period", period.Id.ToString(),
+            _audit.Send("ParameterService", "Create", "Period", period.Id.ToString(),
                 CurrentUserId, $"{period.Name} ({period.StartDate} - {period.EndDate})");
             return CreatedAtAction(nameof(GetById), new { id = period.Id },
                 ApiResponse<PeriodDto>.Ok(period, Messages.Period.Created));
@@ -69,7 +69,7 @@ public class PeriodsController : ControllerBase
         if (period is null)
             return NotFound(ApiResponse.Fail(Messages.Period.NotFound, Messages.Period.NotFoundUser, Messages.Period.NotFoundUser));
 
-        _audit.Send("ParameterService", "UpdatePeriod", "Period", id.ToString(),
+        _audit.Send("ParameterService", "Update", "Period", id.ToString(),
             CurrentUserId, period.Name);
         return Ok(ApiResponse<PeriodDto>.Ok(period, Messages.Period.Updated));
     }
@@ -82,7 +82,7 @@ public class PeriodsController : ControllerBase
         if (!result)
             return NotFound(ApiResponse.Fail(Messages.Period.NotFound, Messages.Period.NotFoundUser, Messages.Period.NotFoundUser));
 
-        _audit.Send("ParameterService", "DeletePeriod", "Period", id.ToString(), CurrentUserId);
+        _audit.Send("ParameterService", "Delete", "Period", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData(Messages.Period.Deleted));
     }
 
@@ -94,7 +94,7 @@ public class PeriodsController : ControllerBase
         if (period is null)
             return NotFound(ApiResponse.Fail(Messages.Period.NotFound, Messages.Period.NotFoundUser, Messages.Period.NotFoundUser));
 
-        _audit.Send("ParameterService", "ActivatePeriod", "Period", id.ToString(), CurrentUserId, period.Name);
+        _audit.Send("ParameterService", "StatusChange", "Period", id.ToString(), CurrentUserId, period.Name);
         return Ok(ApiResponse<PeriodDto>.Ok(period, "Dönem aktif edildi."));
     }
 
@@ -106,7 +106,7 @@ public class PeriodsController : ControllerBase
         if (period is null)
             return NotFound(ApiResponse.Fail(Messages.Period.NotFound, Messages.Period.NotFoundUser, Messages.Period.NotFoundUser));
 
-        _audit.Send("ParameterService", "DeactivatePeriod", "Period", id.ToString(), CurrentUserId, period.Name);
+        _audit.Send("ParameterService", "StatusChange", "Period", id.ToString(), CurrentUserId, period.Name);
         return Ok(ApiResponse<PeriodDto>.Ok(period, "Dönem pasif edildi."));
     }
 
@@ -120,7 +120,7 @@ public class PeriodsController : ControllerBase
             if (period is null)
                 return NotFound(ApiResponse.Fail(Messages.Period.NotFound, Messages.Period.NotFoundUser, Messages.Period.NotFoundUser));
 
-            _audit.Send("ParameterService", "ClosePeriod", "Period", id.ToString(), CurrentUserId, period.Name);
+            _audit.Send("ParameterService", "StatusChange", "Period", id.ToString(), CurrentUserId, period.Name);
             return Ok(ApiResponse<PeriodDto>.Ok(period, Messages.Period.Closed));
         }
         catch (InvalidOperationException)

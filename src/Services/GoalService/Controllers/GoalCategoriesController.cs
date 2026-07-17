@@ -50,7 +50,7 @@ public class GoalCategoriesController : ControllerBase
         try
         {
             var category = await _categoryService.CreateAsync(request);
-            _audit.Send("GoalService", "CreateGoalCategory", "GoalCategory", category.Id.ToString(),
+            _audit.Send("GoalService", "Create", "GoalCategory", category.Id.ToString(),
                 CurrentUserId, category.Name);
             return CreatedAtAction(nameof(GetById), new { id = category.Id },
                 ApiResponse<GoalCategoryDto>.Ok(category, Messages.GoalCategory.Created));
@@ -71,7 +71,7 @@ public class GoalCategoriesController : ControllerBase
             if (category is null)
                 return NotFound(ApiResponse.Fail(Messages.GoalCategory.NotFound, Messages.GoalCategory.NotFoundUser, Messages.GoalCategory.NotFoundUser));
 
-            _audit.Send("GoalService", "UpdateGoalCategory", "GoalCategory", id.ToString(),
+            _audit.Send("GoalService", "Update", "GoalCategory", id.ToString(),
                 CurrentUserId, category.Name);
             return Ok(ApiResponse<GoalCategoryDto>.Ok(category, Messages.GoalCategory.Updated));
         }
@@ -89,7 +89,7 @@ public class GoalCategoriesController : ControllerBase
         if (!result)
             return NotFound(ApiResponse.Fail(Messages.GoalCategory.NotFound, Messages.GoalCategory.NotFoundUser, Messages.GoalCategory.NotFoundUser));
 
-        _audit.Send("GoalService", "DeleteGoalCategory", "GoalCategory", id.ToString(), CurrentUserId);
+        _audit.Send("GoalService", "Delete", "GoalCategory", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData(Messages.GoalCategory.Deleted));
     }
 }

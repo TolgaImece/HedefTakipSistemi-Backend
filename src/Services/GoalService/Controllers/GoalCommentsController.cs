@@ -43,7 +43,7 @@ public class GoalCommentsController : ControllerBase
         try
         {
             var comment = await _commentService.CreateAsync(assignmentId, userId.Value, request);
-            _audit.Send("GoalService", "CreateGoalComment", "GoalComment", comment.Id.ToString(),
+            _audit.Send("GoalService", "Create", "GoalComment", comment.Id.ToString(),
                 userId.ToString(), $"Atama: {assignmentId}");
             return CreatedAtAction(nameof(GetByAssignment), new { assignmentId },
                 ApiResponse<GoalCommentDto>.Ok(comment, Messages.Comment.Created));
@@ -69,7 +69,7 @@ public class GoalCommentsController : ControllerBase
             if (!result)
                 return NotFound(ApiResponse.Fail(Messages.Comment.NotFound, Messages.Comment.NotFoundUser, Messages.Comment.NotFoundUser));
 
-            _audit.Send("GoalService", "DeleteGoalComment", "GoalComment", id.ToString(), userId.ToString());
+            _audit.Send("GoalService", "Delete", "GoalComment", id.ToString(), userId.ToString());
             return Ok(ApiResponse.OkNoData(Messages.Comment.Deleted));
         }
         catch (UnauthorizedAccessException)

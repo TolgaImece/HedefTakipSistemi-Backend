@@ -76,7 +76,7 @@ public class ParametersController : ControllerBase
         try
         {
             var parameter = await _parameterService.CreateAsync(request);
-            _audit.Send("ParameterService", "CreateParameter", "Parameter", parameter.Id.ToString(),
+            _audit.Send("ParameterService", "Create", "Parameter", parameter.Id.ToString(),
                 CurrentUserId, $"{parameter.Key} = {parameter.Value}");
             return CreatedAtAction(nameof(GetById), new { id = parameter.Id },
                 ApiResponse<ParameterDto>.Ok(parameter, "Parametre başarıyla oluşturuldu."));
@@ -95,7 +95,7 @@ public class ParametersController : ControllerBase
         if (parameter is null)
             return NotFound(ApiResponse.Fail(Messages.General.ValidationError, "Parameter not found.", "Parametre bulunamadı."));
 
-        _audit.Send("ParameterService", "UpdateParameter", "Parameter", id.ToString(),
+        _audit.Send("ParameterService", "Update", "Parameter", id.ToString(),
             CurrentUserId, $"{parameter.Key} = {parameter.Value}");
         return Ok(ApiResponse<ParameterDto>.Ok(parameter, "Parametre başarıyla güncellendi."));
     }
@@ -108,7 +108,7 @@ public class ParametersController : ControllerBase
         if (!result)
             return NotFound(ApiResponse.Fail(Messages.General.ValidationError, "Parameter not found.", "Parametre bulunamadı."));
 
-        _audit.Send("ParameterService", "DeleteParameter", "Parameter", id.ToString(), CurrentUserId);
+        _audit.Send("ParameterService", "Delete", "Parameter", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData("Parametre başarıyla silindi."));
     }
 }

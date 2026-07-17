@@ -57,7 +57,7 @@ public class GoalTemplatesController : ControllerBase
         try
         {
             var template = await _templateService.CreateAsync(request);
-            _audit.Send("GoalService", "CreateGoalTemplate", "GoalTemplate", template.Id.ToString(),
+            _audit.Send("GoalService", "Create", "GoalTemplate", template.Id.ToString(),
                 CurrentUserId, template.Title);
             return CreatedAtAction(nameof(GetById), new { id = template.Id },
                 ApiResponse<GoalTemplateDto>.Ok(template, Messages.GoalTemplate.Created));
@@ -78,7 +78,7 @@ public class GoalTemplatesController : ControllerBase
             if (template is null)
                 return NotFound(ApiResponse.Fail(Messages.GoalTemplate.NotFound, Messages.GoalTemplate.NotFoundUser, Messages.GoalTemplate.NotFoundUser));
 
-            _audit.Send("GoalService", "UpdateGoalTemplate", "GoalTemplate", id.ToString(),
+            _audit.Send("GoalService", "Update", "GoalTemplate", id.ToString(),
                 CurrentUserId, template.Title);
             return Ok(ApiResponse<GoalTemplateDto>.Ok(template, Messages.GoalTemplate.Updated));
         }
@@ -96,7 +96,7 @@ public class GoalTemplatesController : ControllerBase
         if (!result)
             return NotFound(ApiResponse.Fail(Messages.GoalTemplate.NotFound, Messages.GoalTemplate.NotFoundUser, Messages.GoalTemplate.NotFoundUser));
 
-        _audit.Send("GoalService", "DeleteGoalTemplate", "GoalTemplate", id.ToString(), CurrentUserId);
+        _audit.Send("GoalService", "Delete", "GoalTemplate", id.ToString(), CurrentUserId);
         return Ok(ApiResponse.OkNoData(Messages.GoalTemplate.Deleted));
     }
 }

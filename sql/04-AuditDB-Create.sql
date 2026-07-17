@@ -21,7 +21,7 @@ BEGIN
         ServiceName NVARCHAR(50)        NOT NULL,
         -- IdentityService | ParameterService | GoalService
         Action      NVARCHAR(50)        NOT NULL,
-        -- Create | Update | Delete | Login | Logout | StatusChange
+        -- Create | Update | Delete | Login | Logout | StatusChange | ChangePassword
         EntityName  NVARCHAR(100)       NULL,
         EntityId    NVARCHAR(100)       NULL,
         -- GUID string — cross-DB referans
@@ -34,7 +34,7 @@ BEGIN
 
         CONSTRAINT PK_AuditLogs PRIMARY KEY (Id),
         CONSTRAINT CK_AuditLogs_ServiceName CHECK (ServiceName IN ('IdentityService', 'ParameterService', 'GoalService')),
-        CONSTRAINT CK_AuditLogs_Action CHECK (Action IN ('Create', 'Update', 'Delete', 'Login', 'Logout', 'StatusChange'))
+        CONSTRAINT CK_AuditLogs_Action CHECK (Action IN ('Create', 'Update', 'Delete', 'Login', 'Logout', 'StatusChange', 'ChangePassword'))
     );
 
     CREATE INDEX IX_AuditLogs_ServiceName ON AuditLogs(ServiceName);
